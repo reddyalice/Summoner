@@ -1,7 +1,8 @@
 use crate::prelude::*;
 
 #[derive(Component)]
-pub struct CameraZoom {
-    zoom : f32,
-    initial_zoom : f32
+pub struct CameraFocus {
+    pub zoom : f32,
+    pub focus : Vec3,
+    pub inital_dir : Vec3
 }

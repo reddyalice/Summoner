@@ -43,6 +43,11 @@ pub fn setup_camera(
             intensity: 0.1,
             ..default()
         },
-        RaycastPickCamera::default()
+        RaycastPickCamera::default(),
+        CameraFocus {
+            zoom : 1.0,
+            focus : Vec3 { x: 0.0, y: 0.0, z: 0.0},
+            inital_dir : Vec3 { x: 0.0, y: 12.0, z: 12.0 }
+        }
     ));
 }

@@ -1,5 +1,5 @@
 
-use bevy::window::{CompositeAlphaMode, PresentMode};
+use bevy::window::PresentMode;
 use summoner::prelude::*;
 
 
@@ -12,7 +12,6 @@ fn main() {
                     title: "Summoner".into(),
                     present_mode : PresentMode::AutoNoVsync,
                     //transparent : true,
-                    //composite_alpha_mode : CompositeAlphaMode::Auto, 
                     ..default()
                 }),
                 ..default()
