@@ -20,7 +20,11 @@ impl  Plugin for CameraPlugin {
                 .build()
                 .disable::<DefaultHighlightingPlugin>()
                 .disable::<DebugPickingPlugin>())
-            .add_startup_system(setup_camera);
+            .add_startup_system(setup_camera)
+            .add_systems((
+                update_cam_position,
+                move_camera
+            ));
     }
 }
 

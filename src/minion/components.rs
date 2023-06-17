@@ -7,12 +7,12 @@ pub struct OnGrids{
 
 #[derive(Component)]
 pub struct MinionAnimationStep{
-    pub step : u8
+    pub step : u8,
+    pub state : MinionAnimationState
 }
 
-#[derive(Component, Default)]
+
 pub enum MinionAnimationState{
-    #[default]
     Idle,
     Walking
 }

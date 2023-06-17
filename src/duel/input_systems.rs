@@ -34,11 +34,12 @@ pub fn mouse_combine_change(
     mut mouse_down: EventReader<MouseDownGrid>,
     input: Res<Input<KeyCode>>,
     mut combined_grids: ResMut<CombinedGrids>,
-    grid_pos: Query<&GridPos>,
+    grid_pos: Query<(&GridPos, &GridPassability)>,
     mut grids: Query<(&mut GridColorAndShape, &GridSelected)>,
 ) {
     for ev in mouse_down.iter() {
-        if let Ok(pos) = grid_pos.get(ev.0) {
+        if let Ok((pos, pass)) = grid_pos.get(ev.0) {
+            if pass.passable {
             if input.pressed(KeyCode::LShift) {
                 if combined_grids.is_combined(pos.x, pos.y) {
                     for grid in combined_grids.get_combined_from_pos(pos.x, pos.y).unwrap() {
@@ -61,6 +62,7 @@ pub fn mouse_combine_change(
                 }
             }
         }
+    }
     }
 }
 
