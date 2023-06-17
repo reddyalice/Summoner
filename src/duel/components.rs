@@ -130,13 +130,13 @@ impl GridBundle {
                 target_pos: if passable {
                     def_pos
                 } else {
-                    def_pos - lift_distance
+                    def_pos - lift_distance / 2.0
                 },
             },
             target_rot : GridTargetRot { target_rot: Quat::from_rotation_x(-PI / 2.0) },
             passability: GridPassability {
                 passable,
-                show_passable: show_passable,
+                show_passable,
             },
             color_and_shape: GridColorAndShape { 
                 shape: GridShape::Closed, 
@@ -167,12 +167,13 @@ impl UnpassBundle {
         mesh: Handle<Mesh>,
         material: Handle<StandardMaterial>,
         passable: bool,
+        show_passable : bool,
     ) -> UnpassBundle {
         UnpassBundle {
             pbr: PbrBundle {
                 mesh,
                 material,
-                visibility: if !passable {
+                visibility: if show_passable && !passable {
                     Visibility::Visible
                 } else {
                     Visibility::Hidden

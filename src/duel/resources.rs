@@ -296,6 +296,8 @@ impl CombinedGrids {
         self.added_ones.clear();
         self.removed_ones.clear();
         self.inds.clear();
+        self.pos_to_layer.clear();
+        self.layer_to_keys.clear();
         self.added = false;
         self.removed = false;
         self.created = false;
