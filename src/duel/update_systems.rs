@@ -2,7 +2,6 @@ use crate::prelude::*;
 
 pub fn update_grid_transform(
     mut grids: Query<(&mut Transform, &GridTargetPos, &GridTargetRot)>,
-    grid_lift: Res<GridLift>,
     time: Res<Time>,
 ) {
     grids
@@ -11,21 +10,20 @@ pub fn update_grid_transform(
             if transform.translation != target_pos.target_pos {
                 transform.translation = transform.translation.lerp(
                     target_pos.target_pos,
-                    time.delta_seconds() * grid_lift.lift_speed,
+                    time.delta_seconds() * LIFT_SPEED,
                 );
             }
 
             if transform.rotation != target_rot.target_rot {
                 transform.rotation = transform.rotation.lerp(
                     target_rot.target_rot,
-                    time.delta_seconds() * grid_lift.lift_speed * 2.0,
+                    time.delta_seconds() * LIFT_SPEED * 2.0,
                 );
             }
         });
 }
 
 pub fn update_selection(
-    grid_lift: Res<GridLift>,
     mut grids: Query<
         (
             &GridSelected,
@@ -38,11 +36,11 @@ pub fn update_selection(
     >,
 ) {
     grids.par_iter_mut().for_each_mut(
-        |(selection, default_pos, passbale, mut target_pos, mut color_and_shape)| {
-            if passbale.passable {
+        |(selection, default_pos, passable, mut target_pos, mut color_and_shape)| {
+            if passable.grid_type == GridType::Passable {
                 if selection.selected {
                     color_and_shape.color = GridColor::Selected;
-                    target_pos.target_pos = default_pos.default_pos + grid_lift.lift_distance;
+                    target_pos.target_pos = default_pos.default_pos + LIFT_DISTANCE;
                 } else {
                     target_pos.target_pos = default_pos.default_pos;
                 }
@@ -51,12 +49,12 @@ pub fn update_selection(
     );
 }
 
-pub fn update_combined_grids(
-    mut combined_grids: ResMut<CombinedGrids>,
-    grids: Query<(&mut GridColorAndShape, &mut GridTargetRot)>,
+pub fn update_layers(
+    mut grids: ResMut<Grids>,
+    color_shape_and_rot : Query<(&mut GridColorAndShape, &mut GridTargetRot)>,
 ) {
-    if combined_grids.did_change() {
-        combined_grids.update(grids);
+    if grids.need_update() {
+        grids.update_layers(color_shape_and_rot);
     }
 }
 

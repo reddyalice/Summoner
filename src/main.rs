@@ -20,14 +20,11 @@ fn main() {
             .build()
         )
         .add_state::<GameState>()
-        .add_loading_state(
-            LoadingState::new(GameState::Loading)
-            .continue_to_state(GameState::None)
-        )
+        .add_plugin(LoadingPlugin)
         .add_plugin(CameraPlugin)
         .add_plugin(DuelPlugin)
         .add_plugin(WorldInspectorPlugin::new())
-        .add_system(start_duel.in_set(OnUpdate(GameState::None)))
+        .add_system(start_duel.in_set(OnUpdate(GameState::Idle)))
         .add_system(end_duel.in_set(OnUpdate(GameState::Duel)))
         .run();
 }
@@ -48,7 +45,7 @@ pub fn end_duel(
     mut game_state: ResMut<NextState<GameState>>
 ){
     if input.just_pressed(KeyCode::P) {
-        game_state.set(GameState::None);
+        game_state.set(GameState::Idle);
     }
 }
 

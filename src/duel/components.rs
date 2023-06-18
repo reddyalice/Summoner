@@ -18,6 +18,8 @@ pub enum GridColor {
     Unpassable
 }
 
+
+
 #[derive(Component)]
 pub struct GridColorAndShape{
     pub shape : GridShape,
@@ -51,7 +53,7 @@ pub struct GridTargetRot {
 
 #[derive(Component)]
 pub struct GridPassability {
-    pub passable: bool,
+    pub grid_type: GridType,
     pub show_passable: bool,
 }
 
@@ -92,8 +94,7 @@ impl GridBundle {
         y: u8,
         size_x: u8,
         size_y: u8,
-        lift_distance: Vec3,
-        passable: bool,
+        grid_type: &GridType,
         show_passable: bool,
         mesh: Handle<Mesh>,
         material: Handle<StandardMaterial>,
@@ -108,13 +109,13 @@ impl GridBundle {
             
             pbr: PbrBundle {
                 mesh,
-                material: if passable { material } else { unpass_material },
+                material: if *grid_type == GridType::Passable { material } else { unpass_material },
                 transform: Transform {
                     translation: def_pos,
                     rotation: Quat::from_rotation_x(-PI / 2.0),
                     ..default()
                 },
-                visibility: if !show_passable && !passable {
+                visibility: if !show_passable && (*grid_type == GridType::Unpassable) {
                     Visibility::Hidden
                 } else {
                     Visibility::Visible
@@ -127,20 +128,20 @@ impl GridBundle {
                 default_pos: def_pos,
             },
             target_pos: GridTargetPos {
-                target_pos: if passable {
+                target_pos: if *grid_type == GridType::Passable {
                     def_pos
                 } else {
-                    def_pos - lift_distance / 2.0
+                    def_pos - LIFT_DISTANCE / 2.0
                 },
             },
             target_rot : GridTargetRot { target_rot: Quat::from_rotation_x(-PI / 2.0) },
             passability: GridPassability {
-                passable,
+                grid_type : grid_type.clone(),
                 show_passable,
             },
             color_and_shape: GridColorAndShape { 
                 shape: GridShape::Closed, 
-                color: if passable {GridColor::Default} else {GridColor::Unpassable} },
+                color: if *grid_type == GridType::Passable {GridColor::Default} else {GridColor::Unpassable} },
             minion : GridMinion { minion: Entity::PLACEHOLDER },
             pick_target: RaycastPickTarget::default(),
             mouse_on: OnPointer::<Over>::send_event::<MouseOnGrid>(),
@@ -166,14 +167,14 @@ impl UnpassBundle {
     pub fn create(
         mesh: Handle<Mesh>,
         material: Handle<StandardMaterial>,
-        passable: bool,
+        grid_type : &GridType,
         show_passable : bool,
     ) -> UnpassBundle {
         UnpassBundle {
             pbr: PbrBundle {
                 mesh,
                 material,
-                visibility: if show_passable && !passable {
+                visibility: if show_passable && (*grid_type == GridType::Unpassable) {
                     Visibility::Visible
                 } else {
                     Visibility::Hidden
