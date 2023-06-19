@@ -3,7 +3,7 @@ use crate::prelude::*;
 mod asset_handles;
 mod grid_map;
 mod grids_resource;
-mod resources;
+mod duel_resources;
 mod input_systems;
 mod update_systems;
 mod components;
@@ -12,7 +12,7 @@ mod events;
 pub use asset_handles::*;
 pub use grid_map::*;
 pub use grids_resource::*;
-pub use resources::*;
+pub use duel_resources::*;
 pub use components::*;
 pub use events::*;
 
@@ -59,15 +59,7 @@ fn spawn_grids(
     images : Res<Assets<Image>>,
     map_textures : Res<GridMapTextureAssets>
 ) {
-   
     let grid_map =  GridMap::create_from_image(images.get(&map_textures.test_map).unwrap());
-    /*for x in 0..12 as u8 {
-        for y in 0..6 as u8 {
-            grid_map.add(x, y, GridType::Passable);
-        }
-    }*/
-
-
     grids.create(&grid_map, grid_assets, &mut commands);
     
 }

@@ -41,11 +41,13 @@ pub fn start_duel(
 }
 
 pub fn end_duel(
+    time : Res<Time>,
     input: Res<Input<KeyCode>>,
     mut game_state: ResMut<NextState<GameState>>
 ){
     if input.just_pressed(KeyCode::P) {
         game_state.set(GameState::Idle);
     }
+    println!("{}", 1.0 / time.delta_seconds_f64());
 }
 
