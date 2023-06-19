@@ -2,6 +2,7 @@ use crate::prelude::*;
 
 mod asset_handles;
 mod grid_map;
+mod grids_resource;
 mod resources;
 mod input_systems;
 mod update_systems;
@@ -10,6 +11,7 @@ mod events;
 
 pub use asset_handles::*;
 pub use grid_map::*;
+pub use grids_resource::*;
 pub use resources::*;
 pub use components::*;
 pub use events::*;

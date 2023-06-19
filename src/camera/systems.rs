@@ -11,8 +11,9 @@ pub fn update_cam_position(
     for (mut transform, focus) in camera_pos.iter_mut(){
         let new = focus.focus + focus.inital_dir * focus.zoom;
         if transform.translation != new {
-            transform.translation = transform.translation.lerp(new, time.delta_seconds() * 5.0);
+            transform.translation = transform.translation.lerp(new, time.delta_seconds() * 10.0);
         }
+        
     }
 }
 
@@ -45,6 +46,9 @@ pub fn move_camera(
         },
         Err(_) => {},
     }
+
+
+
 }
 
 
